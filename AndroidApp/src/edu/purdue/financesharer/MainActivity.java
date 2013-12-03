@@ -1,5 +1,7 @@
 package edu.purdue.financesharer;
 
+//import edu.purdue.cs.cs252.channel.ChannelException;
+//import edu.purdue.cs.cs252.channel.TCPChannel;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.app.Activity;
@@ -17,7 +19,16 @@ import android.widget.TextView;
 
 
 public class MainActivity extends Activity {
-
+	UserBalance[] userBalances = new UserBalance[30];
+	Transaction[] myTrans = new Transaction[30];
+	String user;
+	String group;   
+	String balanceUsedFor;
+	int balanceTranNum;
+	boolean useChannel=true;
+	boolean selfRespond=false;
+	int numTrans;
+	int numUB;
 
 	//Transaction[] myTrans;
 	//UserBalance[] myUserBalances;
@@ -43,7 +54,7 @@ public class MainActivity extends Activity {
                 int portNumber = Integer.parseInt(et1.getText().toString());   
                 
                 if (portNumber>1024 && portNumber<65536){
-                	myClient.initializePort(portNumber);
+                	myClient.initializePort("data.cs.purdue.edu",portNumber);
                     gotoSignin("Welcome!");
                 }
 
@@ -67,10 +78,10 @@ public class MainActivity extends Activity {
                 String password = et2.getText().toString();  
                 
                 searchBuyer="";
-                searchLowDate="1990-01-01";
-                searchHighDate="2030-01-01";
-                searchLowAmount="0.00";
-                searchHighAmount="1000000.00";
+                searchLowDate="";
+                searchHighDate="";
+                searchLowAmount="";
+                searchHighAmount="";
                 
                 //myClient.user = username;
                 myClient.sendMessage("2 2 ;;"+username+";"+password+"\n\n");
@@ -109,9 +120,9 @@ public class MainActivity extends Activity {
 		mytextview.setText("Memo: "+myClient.myTrans[tranNum].description);
 		
         mytextview = (TextView) findViewById(R.id.userText);		
-		mytextview.setText(myClient.user);		
+		mytextview.setText("User: "+myClient.user);		
         mytextview = (TextView) findViewById(R.id.groupText);		
-		mytextview.setText(myClient.group);	
+		mytextview.setText("Group: "+myClient.group);	
 		final Button button1 = (Button) findViewById(R.id.signOut);
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -187,7 +198,9 @@ public class MainActivity extends Activity {
 				if (myClient.myTrans[tranNum].buyer.equals(myClient.userBalances[i].user)){
 					theseRadioButtons[i].setChecked(true);
 				}
-				if (myClient.myTrans[tranNum].forWho.contains(myClient.userBalances[i].user)){
+				//if ( (myClient.myTrans[tranNum].forWho).contains(myClient.userBalances[i].user)){
+
+				if ( (","+myClient.myTrans[tranNum].forWho+",").contains(","+myClient.userBalances[i].user+",")){
 					theseCheckBoxes[i].setChecked(true);
 				}
 			}
@@ -315,9 +328,9 @@ public class MainActivity extends Activity {
     	}
 
 		TextView mytextview = (TextView) findViewById(R.id.userText);		
-		mytextview.setText(myClient.user);		
+		mytextview.setText("User: "+myClient.user);		
         mytextview = (TextView) findViewById(R.id.groupText);		
-		mytextview.setText(myClient.group);
+		mytextview.setText("Group: "+myClient.group);
         final Button button1 = (Button) findViewById(R.id.signOut);
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -345,10 +358,10 @@ public class MainActivity extends Activity {
         button4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {   
             	searchBuyer="";
-            	searchLowDate="1990-01-01";
-            	searchHighDate="2030-01-01";
-            	searchLowAmount="0.00";
-            	searchHighAmount="1000000.00";
+            	searchLowDate="";
+            	searchHighDate="";
+            	searchLowAmount="";
+            	searchHighAmount="";
                 
             	requestViewTrans();
             }
@@ -381,9 +394,9 @@ public class MainActivity extends Activity {
     	}
 
 		TextView mytextview = (TextView) findViewById(R.id.userText);		
-		mytextview.setText(myClient.user);		
+		mytextview.setText("User: "+myClient.user);		
         mytextview = (TextView) findViewById(R.id.groupText);		
-		mytextview.setText(myClient.group);
+		mytextview.setText("Group: "+myClient.group);
         final Button button1 = (Button) findViewById(R.id.signOut);
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -472,7 +485,10 @@ public class MainActivity extends Activity {
 	      
 		myClient = new ClientComm(this);
 
-        gotoEnterPort();
+
+    	myClient.initializePort("moore01.cs.purdue.edu",8888);
+        gotoSignin("Welcome!");		
+        //gotoEnterPort();
         
 
 	}
@@ -484,5 +500,6 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	
 
 }
