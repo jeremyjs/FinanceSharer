@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/buyerIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Buyer" />
+
+    <TextView
+        android:id="@+id/forWhoIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/forWhoCheckboxGroup"
+        android:text="For Who" />
+    
+    <RadioGroup
+        android:id="@+id/buyerRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_below="@+id/buyerIndicator">
+
+
+    </RadioGroup>
+    
+    <LinearLayout
+        android:id="@+id/forWhoCheckboxGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/buyerRadioGroup"
+        android:orientation="vertical" 
+        android:layout_below="@+id/buyerIndicator">
+
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/dateBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/buyerRadioGroup"
+        android:hint="Date YYYY-MM-DD"
+        android:inputType="date" />
+        
+    <EditText
+        android:id="@+id/amountBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/dateBox"
+        android:hint="Amount"
+        android:inputType="numberDecimal" />
+    
+    <EditText 
+        android:id="@+id/descriptionBox" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_alignParentLeft="true" 
+        android:layout_alignParentRight="true" 
+        android:layout_below="@+id/amountBox" 
+        android:hint="Description" 
+        android:inputType="text" />
+    
+    <Button 
+        android:id="@+id/createTran" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_alignParentLeft="true" 
+        android:layout_alignParentRight="true" 
+        android:layout_below="@+id/descriptionBox" 
+        android:text="OK" />
+    
+    <Button 
+        android:id="@+id/cancel" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_alignParentLeft="true" 
+        android:layout_alignParentRight="true" 
+        android:layout_below="@+id/createTran" 
+        android:text="Cancel" />
+
+
+
+</RelativeLayout>
