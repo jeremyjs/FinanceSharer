@@ -22,13 +22,13 @@ public class RequestProcessor {
 
 		ArrayList<ArrayList<String>> results = parse(message_in);
 
-		// System.out.println("results-----");
-		// for(int i=0; i < results.size(); i++){
-		// for(int j=0; j < results.get(i).size(); j++){
-		// System.out.println(Integer.toString(i) + ", " + Integer.toString(j) +
-		// ": " + results.get(i).get(j));
-		// }
-		// }
+		 System.out.println("results-----");
+		 for(int i=0; i < results.size(); i++){
+		 for(int j=0; j < results.get(i).size(); j++){
+		 System.out.println(Integer.toString(i) + ", " + Integer.toString(j) +
+		 ": " + results.get(i).get(j));
+		 }
+		 }
 
 		String message_out = translate(message_in, results, validation_flag);
 
@@ -205,41 +205,52 @@ public class RequestProcessor {
 
 		if (message_in.charAt(2) == '0') {
 			// Create group account
-			SQLManager sql_manager = new SQLManager();
-			ArrayList<ArrayList<String>> findGroup = sql_manager
-					.execQuery("SELECT gname FROM UserGroup WHERE gname="
-							+ gname);
-			if (findGroup.size() == 0) {
-				sql = "INSERT INTO UserGroup VALUES(" + gname + "," + gpw + ")";
-			} else {
-				System.out
-						.println("Create Group Account: Group name already exists!");
+			if ( !gname.equalsIgnoreCase("''") ) {
+				SQLManager sql_manager = new SQLManager();
+				ArrayList<ArrayList<String>> findGroup = sql_manager
+						.execQuery("SELECT gname FROM UserGroup WHERE gname="
+								+ gname);
+				if (findGroup.size() == 0) {
+					sql = "INSERT INTO UserGroup VALUES(" + gname + "," + gpw + ")";
+				} else {
+					System.out.println("Create Group Account: Group name already exists!");
+				}	
+			}
+			else {
+				validation_flag = false;
+				System.out.println("Create Group Account: Group name is null!");
 			}
 		} else if (message_in.charAt(2) == '1') {
 			// Create user account
-			SQLManager sql_manager = new SQLManager();
-			ArrayList<ArrayList<String>> findGroup = sql_manager
-					.execQuery("SELECT * FROM UserGroup WHERE gname=" + gname);
-			if (findGroup.size() != 0) {
-				if (findGroup.get(0).get(1)
-						.equals(gpw.substring(1, gpw.length() - 1))) {
-					ArrayList<ArrayList<String>> findUser = sql_manager
-							.execQuery("SELECT uname FROM User WHERE uname="
-									+ uname);
-					if (findUser.size() == 0) {
-						sql = "INSERT INTO User VALUES(" + gname + "," + uname
-								+ "," + upw + "," + "0)";
+			if ( !uname.equalsIgnoreCase("''") ) {
+				SQLManager sql_manager = new SQLManager();
+				ArrayList<ArrayList<String>> findGroup = sql_manager
+						.execQuery("SELECT * FROM UserGroup WHERE gname=" + gname);
+				if (findGroup.size() != 0) {
+					if (findGroup.get(0).get(1)
+							.equals(gpw.substring(1, gpw.length() - 1))) {
+						ArrayList<ArrayList<String>> findUser = sql_manager
+								.execQuery("SELECT uname FROM User WHERE uname="
+										+ uname);
+						if (findUser.size() == 0) {
+							sql = "INSERT INTO User VALUES(" + gname + "," + uname
+									+ "," + upw + "," + "0)";
+						} else {
+							System.out
+									.println("Create User Account: User name already exists!");
+						}
 					} else {
 						System.out
-								.println("Create User Account: User name already exists!");
+								.println("Create User Account: Group password is incorrect!");
 					}
 				} else {
 					System.out
-							.println("Create User Account: Group password is incorrect!");
+							.println("Create User Account: Group name does not exist!");
 				}
-			} else {
-				System.out
-						.println("Create User Account: Group name does not exist!");
+			}
+			else {
+				validation_flag = false;
+				System.out.println("Create Group Account: Group name is null!");
 			}
 		} else if (message_in.charAt(2) == '2') {
 			// User login
@@ -338,7 +349,7 @@ public class RequestProcessor {
 			message_out += ";" + group + ";" + user + "\n\n";
 		} else if (data_type == 2 && action_type == 2) {
 			// Account login
-			if(validation_flag && results.get(0).get(1).equals(getAttr(message_in, 3))){
+			if(validation_flag && results.size() > 0 && results.get(0).get(1).equals(getAttr(message_in, 3))){
 				message_out = "2 2 1";
 			}
 			else{
