@@ -245,7 +245,12 @@ public class RequestProcessor {
 			// User login
 			// sql = "INSERT INTO User VALUES(" + gname + "," + uname + "," +
 			// upw + "," + "0)";
-			sql = "SELECT gname,upw FROM User WHERE uname=" + uname;
+			if ( !uname.equalsIgnoreCase("''")) {
+				sql = "SELECT gname,upw FROM User WHERE uname=" + uname;
+			}
+			else {
+				validation_flag = false;
+			}
 		}
 		return sql;
 	}
@@ -296,14 +301,9 @@ public class RequestProcessor {
 			message_out += "1 0 ";
 			for (int i = 0; i < results.size(); i++) {
 				for (int j = 0; j < results.get(i).size(); j++) {
-					message_out += results.get(i).get(j);
-					if (j != results.get(i).size() - 1) {
-						message_out += ";";
-					}
+					message_out += results.get(i).get(j) + "$";
 				}
-				message_out += "\n";
 			}
-			message_out += "\n";
 		} else if (data_type == 1 && action_type == 1) {
 			// Current balance
 			message_out += "1 1 ";
@@ -334,8 +334,12 @@ public class RequestProcessor {
 			message_out += ";" + group + ";" + user + "\n\n";
 		} else if (data_type == 2 && action_type == 2) {
 			// Account login
-			message_out = (validation_flag && results.get(0).get(1)
-					.equals(getAttr(message_in, 3))) ? "2 2 1" : "2 2 0";
+			if(validation_flag && results.get(0).get(1).equals(getAttr(message_in, 3))){
+				message_out = "2 2 1";
+			}
+			else{
+				return "2 2 0;;\n\n";
+			}
 			String group = results.get(0).get(0);
 			String user = getAttr(message_in, 2);
 			message_out += ";" + group + ";" + user + "\n\n";
