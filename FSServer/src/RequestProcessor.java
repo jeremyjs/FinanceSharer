@@ -301,8 +301,12 @@ public class RequestProcessor {
 			message_out += "1 0 ";
 			for (int i = 0; i < results.size(); i++) {
 				for (int j = 0; j < results.get(i).size(); j++) {
-					message_out += results.get(i).get(j) + "$";
+					message_out += results.get(i).get(j);
+					if (j != results.get(i).size() - 1) {
+						message_out += ";";
+					}
 				}
+				message_out += "$";
 			}
 		} else if (data_type == 1 && action_type == 1) {
 			// Current balance
